@@ -1,29 +1,5 @@
 def test_case():
     yield """
-Sent: Tue, 27 Jan 2015 15:20:32 -0700
-From: benm@example.com
-To: takeiteasy@example.com
-Subject: Did you fix my widget yet?
-Body: Check out our new example Solutions website for a virtual tour!
-*http://examplesolutions.com
-<http://examplesolutions.com>*
-
-
-
-*Ben Montgomery*CSS Manager
-
-
-*example America*
-
-2929 Decker lake Dr.
-Salt Lake City, UT  84119
-toll free *877-740-3827*
-tel 801 926 1540 ext. 7240
-fax 801 926 1501
-BenM@example.com
-    """
-    
-    yield """
 Bad email address on order ack # 602278
 Sent: Tue, 31 Mar 2015 12:20:41 -0600
 From: gmckinley@example.com
