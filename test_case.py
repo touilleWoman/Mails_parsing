@@ -2,55 +2,42 @@ def test_case():
     yield """
 Bad email address on order ack # 602278
 Sent: Tue, 31 Mar 2015 12:20:41 -0600
-From: gmckinley@example.com
-To: fakeaddress@example.com
+From: user@example.com
+To: user@example.com
 Subject: Fwd: Bad email on order ack # 602278
 Body: Description##Bad email address on order ack # 602278##
 Service##ERP##
 CI##APP_PAM_PRMS##
-Staff##Greg McKinley##
+Staff##Name Surname##
 Impact##Low##
 Urgency##Low##
 
 It was just the letter S as the email address.
-Notified Kelsey.
+Notified Name Surname.
 
 This has been completed
 
 ---------- Forwarded message ----------
-From: Gregory McKinley <gmckinley@example.com>
+From: Name Surname <user@example.com>
 Date: Tue, Mar 31, 2015 at 12:19 PM
 Subject: Bad email on order ack # 602278
-To: Kelsey Crawford <kcrawford@example.com>
+To: Name Surname <user@example.com>
 
 
-Hi Kelsey,
+Hi Name Surname,
 ...
 Please try again.
 
 Thanks,
-Greg
+Name Surname
+
 """
     
-    yield """
-860 Move Log File
-Sent: Mon, 21 Dec 2015 13:55 -0700
-From: edi@exampleam.com
-To: helpdesk@example.com
-Subject: EDI 860 Move Log File
-Body: See attached log
-Impact##HIGH##
-Urgency##HIGH##
-Service##Office Services##
-CI##APP_INF_PAM_EDI##
-Description##860 Move Log File##
-Staff##Matt Hanson##
-"""
 
     yield """
 Sent: Tue, 1 Jul 2014 16:32:41 +0200
-From:example@example.com
-To: fakeaddress@example.com
+From:user@example.com
+To: user@example.com
 Subject: Re: Service Request #00292653 has been created
 Body: Hello,
 
@@ -63,12 +50,12 @@ pas la note)
 [image: Inline images 1]
 
 --
-Boris Fakename
+Name Surname
 Chef de projet web
-www.example.com
+www.examplewebsite.com
 
 
-On 17 June 2014 11:22, example Take IT Easy <fakeaddress@example.com> wrote:
+On 17 June 2014 11:22, example Take IT Easy <user@example.com> wrote:
 
 >  Hello,
 >
@@ -83,8 +70,8 @@ On 17 June 2014 11:22, example Take IT Easy <fakeaddress@example.com> wrote:
     yield """
 Cognos Migration Incomplete
 Sent: Wed, 15 Apr 2015 11:12:51 -0600
-From: example@petzl.com
-To: fakeaddress@petzl.com
+From: user@petzl.com
+To: user@petzl.com
 Subject: Cognos Migration Incomplete
 Body: Hello,
 
@@ -96,12 +83,12 @@ reports at this time?
 '
 Thanks,
 
-*Dianne Anderson*
+*Name Surname*
 Senior Financial Accountant
-*Petzl America*
-tel 801.926.1571
-toll free 877.807.3805 x7223
-fax 801.926.1571
-example@petzl.com
-www.petzl.com
+*Organization Name*
+tel 123.456.7890
+toll free 123.456.7890 x1234
+fax 123.456.7890
+user@example.com
+www.examplewebsite.com
 """
