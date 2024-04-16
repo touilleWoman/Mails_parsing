@@ -3,7 +3,7 @@ def test_case():
 Bad email address on order ack # 602278
 Sent: Tue, 31 Mar 2015 12:20:41 -0600
 From: gmckinley@example.com
-To: takeiteasy@example.com
+To: fakeaddress@example.com
 Subject: Fwd: Bad email on order ack # 602278
 Body: Description##Bad email address on order ack # 602278##
 Service##ERP##
@@ -49,8 +49,8 @@ Staff##Matt Hanson##
 
     yield """
 Sent: Tue, 1 Jul 2014 16:32:41 +0200
-From: bstephan@example.com
-To: takeiteasy@example.com
+From:example@example.com
+To: fakeaddress@example.com
 Subject: Re: Service Request #00292653 has been created
 Body: Hello,
 
@@ -68,7 +68,7 @@ Chef de projet web
 www.example.com
 
 
-On 17 June 2014 11:22, example Take IT Easy <takeiteasy@example.com> wrote:
+On 17 June 2014 11:22, example Take IT Easy <fakeaddress@example.com> wrote:
 
 >  Hello,
 >
@@ -78,4 +78,30 @@ On 17 June 2014 11:22, example Take IT Easy <takeiteasy@example.com> wrote:
 >
 > Service Desk Team
 >
+"""
+
+    yield """
+Cognos Migration Incomplete
+Sent: Wed, 15 Apr 2015 11:12:51 -0600
+From: example@petzl.com
+To: fakeaddress@petzl.com
+Subject: Cognos Migration Incomplete
+Body: Hello,
+
+For C8 under domain PetzlAM and PetzlFR the migration looks incomplete ,
+not all of my reports are under Accounting.  Under domain PetzlAM (Old) my
+reports are there.
+Is this what you would expect or should I be seeing under PetzlFR all of my
+reports at this time?
+'
+Thanks,
+
+*Dianne Anderson*
+Senior Financial Accountant
+*Petzl America*
+tel 801.926.1571
+toll free 877.807.3805 x7223
+fax 801.926.1571
+example@petzl.com
+www.petzl.com
 """

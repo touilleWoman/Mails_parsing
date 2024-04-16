@@ -14,31 +14,6 @@ def remove_header(mail):
     return mail
 
 
-def clean_signature(body):
-    # Detect signature block
-    pattern = re.compile(r"(--\s*\n)([\s\S]*)", re.DOTALL)
-    match = pattern.search(body)
-    if match:
-        _separator = match.group(1)
-        signature = match.group(2)
-        # Define patterns to remove phone numbers, emails, and web links
-        phone_pattern = re.compile(
-            r"\b(?:tel|phone|fax):\s*[\d\s()+-]+\b", re.IGNORECASE
-        )
-        email_pattern = re.compile(r"\b[\w.-]+@[\w.-]+\.\w+\b")
-        link_pattern = re.compile(r"\b(?:www\.)?[\w-]+\.\w{2,}\b")
-
-        # Remove identified items
-        signature = phone_pattern.sub("", signature)
-        signature = email_pattern.sub("", signature)
-        signature = link_pattern.sub("", signature)
-
-        # Replace the original signature with the cleaned version
-        body = body[: match.start()] + signature
-
-    return body
-
-
 def process_one_mail(mail):
     """
     remove signature, but keep the first line of the signature,
@@ -46,8 +21,29 @@ def process_one_mail(mail):
     """
 
     body = remove_header(mail)
-    body = clean_signature(body)
-    return body
+    sig_separtor = [
+        r"^[>| ]*Thanks,$",
+        r"^[>| ]*Thank you,$",
+        r"^[>| ]*Best regards,$",
+        r"^[>| ]*Cordialement,$",
+        r"^[>| ]*[-|_|\*|=]{2,}[ ]*$",
+    ]
+    sig_separtor_regex = re.compile(
+        "|".join(sig_separtor), re.MULTILINE | re.IGNORECASE
+    )
+    try:
+        body, signature = re.split(sig_separtor_regex, body, maxsplit=1)
+    except Exception:
+        # No signature found, do nothing
+        return mail
+    else:
+        # try to grab the writer's name from the signature
+        name = ""
+        for line in signature.split("\n"):
+            if re.search(r"\b[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\b", line) and len(line) < 20:
+                name = line
+                break
+        return body + name
 
 
 def need_to_process(text):
@@ -63,6 +59,9 @@ def need_to_process(text):
 
 
 def process(text):
+    """
+    main function to process the email
+    """
     if not need_to_process(text):
         st.info("No need to process")
         return text
@@ -101,7 +100,7 @@ def process_and_display(text):
 
 def main():
     st.title("Process Emails with Regex")
-    on = st.toggle('Show Code')
+    on = st.toggle("Show Code")
     if on:
         regex_code = """
 def remove_header(mail):
@@ -112,31 +111,6 @@ def remove_header(mail):
     return mail
 
 
-def clean_signature(body):
-    # Detect signature block
-    pattern = re.compile(r"(--\s*\n)([\s\S]*)", re.DOTALL)
-    match = pattern.search(body)
-    if match:
-        _separator = match.group(1)
-        signature = match.group(2)
-        # Define patterns to remove phone numbers, emails, and web links
-        phone_pattern = re.compile(
-            r"\b(?:tel|phone|fax):\s*[\d\s()+-]+\b", re.IGNORECASE
-        )
-        email_pattern = re.compile(r"\b[\w.-]+@[\w.-]+\.\w+\b")
-        link_pattern = re.compile(r"\b(?:www\.)?[\w-]+\.\w{2,}\b")
-
-        # Remove identified items
-        signature = phone_pattern.sub("", signature)
-        signature = email_pattern.sub("", signature)
-        signature = link_pattern.sub("", signature)
-
-        # Replace the original signature with the cleaned version
-        body = body[: match.start()] + signature
-
-    return body
-
-
 def process_one_mail(mail):
     \"\"\"
     remove signature, but keep the first line of the signature,
@@ -144,8 +118,29 @@ def process_one_mail(mail):
     \"\"\"
 
     body = remove_header(mail)
-    body = clean_signature(body)
-    return body
+    sig_separtor = [
+        r"^[>| ]*Thanks,$",
+        r"^[>| ]*Thank you,$",
+        r"^[>| ]*Best regards,$",
+        r"^[>| ]*Cordialement,$",
+        r"^[>| ]*[-|_|\*|=]{2,}[ ]*$",
+    ]
+    sig_separtor_regex = re.compile(
+        "|".join(sig_separtor), re.MULTILINE | re.IGNORECASE
+    )
+    try:
+        body, signature = re.split(sig_separtor_regex, body, maxsplit=1)
+    except Exception:
+        # No signature found, do nothing
+        return mail
+    else:
+        # try to grab the writer's name from the signature
+        name = ""
+        for line in signature.split("\n"):
+            if re.search(r"\b[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\b", line) and len(line) < 20:
+                name = line
+                break
+        return body + name
 
 
 def need_to_process(text):
@@ -161,6 +156,9 @@ def need_to_process(text):
 
 
 def process(text):
+    \"\"\"
+    main function to process the email
+    \"\"\"
     if not need_to_process(text):
         st.info("No need to process")
         return text
@@ -181,8 +179,9 @@ def process(text):
         if mail:
             cleaned += process_one_mail(mail)
     return cleaned
+
     """
-    
+
         st.code(regex_code, language="python")
 
     # Text area for user input
