@@ -105,8 +105,8 @@ def process(text):
         r"-+ Forwarded message -+",
         r"-+ Message transféré -+",
         r"-+Message d'origine-+",
-        r"On [\w| |,]*:\d{2}[a-zA-Z ]*,[a-zA-Z <>@\.]*wrote[\n ]?:",
-        r"Le .*, .* <.*> a écrit[\n ]?:",
+        r"On .*, .* <.*>[\n ]?wrote[\n ]?:",
+        r"Le .*, .* <.*>[\n ]?a écrit[\n ]?:",
     ]
     forward_regex = re.compile("|".join(forward_pattern), re.IGNORECASE | re.MULTILINE)
 
