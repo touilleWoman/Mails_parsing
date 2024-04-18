@@ -7,9 +7,12 @@ st.set_page_config(layout="wide")
 
 
 def remove_header(mail):
-    pattern = re.compile(r"^.*?(?=Subject:)", re.DOTALL)
-    mail = re.sub(pattern, "", mail)
-    pattern = re.compile(r"^To:.*$", re.MULTILINE)
+    headers_pattern = [
+        r"^Sent:.*$",
+        r"^From:.*$",
+        r"^To:.*$",
+    ]
+    pattern = re.compile("|".join(headers_pattern), re.MULTILINE)
     mail = re.sub(pattern, "", mail)
     return mail
 
