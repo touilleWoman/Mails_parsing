@@ -29,8 +29,9 @@ Hi Name Surname,
 Please try again.
 
 Thanks,
-Name Surname
 
+Name Surname
+www.petzl.com • www.petzldealer.com
 """
     
 
@@ -52,7 +53,7 @@ pas la note)
 --
 Name Surname
 Chef de projet web
-www.examplewebsite.com
+www.petzl.com • www.petzldealer.com
 
 
 On 17 June 2014 11:22, example Take IT Easy <user@example.com> wrote:
@@ -90,5 +91,5 @@ tel 123.456.7890
 toll free 123.456.7890 x1234
 fax 123.456.7890
 user@example.com
-www.examplewebsite.com
+www.petzldealer.com
 """

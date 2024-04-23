@@ -13,7 +13,7 @@ def remove_header(mail):
         r"^To:.*$",
         r"^Cc:.*$",
         r"^Bcc:.*$",
-        r"^De :.*@.*$", # French headers below
+        r"^De :.*@.*$",  # French headers below
         r"^À :.*$",
         r"^Bcc : .*$",
         r"^Date[ ]?: .*$",
@@ -22,62 +22,58 @@ def remove_header(mail):
     mail = re.sub(pattern, "", mail)
     return mail
 
-def match_petzel(text):
-    """
-    match the bloc of signature: 
-    - with tel or fax followed by www.petzl.com, but no more than 1 empty line between them
-    - with www.petzl.com, without empty line
-    """
-    
-    pattern = [
-        r"(?:(?!\n\n).)*\b(tel|fax)\b(?:(?!\n\n\n).)*www\.petzl\.com",
-        r"(?:(?!\n\n).)*(www\.petzl\.com|\bPetzl America\b)",
-    ]
-    match = re.search('|'.join(pattern), text, re.IGNORECASE | re.DOTALL)
-    if match :
-        body = text[:match.start()]
-        signature = text[match.start():]
-    return body, signature
-
-
 
 def process_one_mail(body):
     """
-    remove signature, but keep the first line of the signature,
-    usually the name of the sender
+    remove signature, try to grab the writer's name from the signature and keep it.
     """
 
-    sig_separtor = [
-        r"^[>| ]*Thanks,$",
+    # List of regex patterns for different signature separators
+    sig_separators = [
+        r"^[>| ]*Thanks[,!]$",
         r"^[>| ]*Thank you,$",
+        r"^[>| ]*All my best,$",
         r"^[>| ]*Best regards[,]?$",
         r"^[>| ]*Cordialement[,]?$",
         r"^[>| ]*[-|_|\*|=]{2,}[ ]*$",
+        r"\[image: Petzl\]",
     ]
-    # search [image: Petzl] as a string
-    sig_separtor.append(re.escape("[image: Petzl]"))
-    
-    sig_separtor_regex = re.compile(
-        "|".join(sig_separtor), re.MULTILINE | re.IGNORECASE
+
+    # List of end patterns (URLs in this case)
+    end_patterns = [
+        r"www\.petzldealer\.com",
+        r"www\.petzlsolutions\.com" r"www\.petzl\.com",
+        r"http:\/\/www\.wpic\.co\/",
+    ]
+    start_pattern = "|".join(sig_separators)
+    end_pattern = "|".join(end_patterns)
+
+    # group2: [\s\S]*? is a non-greedy search
+    # group3: by using a lookahead ?= to make end pattern greedy, so that it captures up to the last URL
+    regex_pattern = re.compile(
+        f"({start_pattern})([\\s\\S]*?)({end_pattern})", re.MULTILINE | re.IGNORECASE
     )
-    signature = None
-    try:
-        # if mail contains sig_pattern, split the mail into body and signature
-        body, signature = re.split(sig_separtor_regex, body, maxsplit=1)
-    except Exception:
-        # no sig_pattern, try to identify signature with petzel pattern
-        body, signature = match_petzel(body)
-    finally:
-        if not signature:
-            return body
-        else:
-            # try to grab the writer's name from the signature
-            name = ""
-            for line in signature.split("\n"):
-                if re.search(r"\b[A-Z][a-z]+(?:\s[A-Z][a-z]+)?\b", line) and len(line) < 20:
-                    name = line
-                    break
-            return body + name
+
+    match = re.search(regex_pattern, body)
+    if not match:
+        return body
+    else:
+        # try to grab the writer's name from the signature
+        signature = match.group(2)
+        first_name = ""
+        last_name = ""
+        for line in signature.split("\n"):
+            match_name = re.search(
+                r"^\*?([A-Z][a-z]+)([\s•\*]{0,3}([A-Z][a-z]+))?\*?$", line
+            )
+            if match_name and len(line) < 20:
+                first_name = match_name.group(1)
+                if len(match_name.groups()) == 3:
+                    last_name = " " + match_name.group(3)
+                break
+        return (
+            body[: match.start()] + first_name + last_name + "\n" + body[match.end() :]
+        )
 
 
 def need_to_process(text):
@@ -94,7 +90,7 @@ def need_to_process(text):
 
 def process(text):
     """
-    main function to process the email
+    main function to process the emails
     """
     if not need_to_process(text):
         st.info("No need to process")
