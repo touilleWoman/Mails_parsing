@@ -48,8 +48,7 @@ def process_one_mail(body):
     start_pattern = "|".join(sig_separators)
     end_pattern = "|".join(end_patterns)
 
-    # group2: [\s\S]*? is a non-greedy search
-    # group3: by using a lookahead ?= to make end pattern greedy, so that it captures up to the last URL
+    # a non-greedy search
     regex_pattern = re.compile(
         f"({start_pattern})([\\s\\S]*?)({end_pattern})", re.MULTILINE | re.IGNORECASE
     )
