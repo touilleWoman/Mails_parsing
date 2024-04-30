@@ -76,7 +76,7 @@ def process_one_mail(body):
             )
             if match_name and len(line) < 20:
                 first_name = match_name.group(1)
-                if len(match_name.groups()) == 3:
+                if match_name.group(3):
                     last_name = " " + match_name.group(3)
                 break
         return (
