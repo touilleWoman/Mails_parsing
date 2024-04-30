@@ -22,6 +22,15 @@ def remove_header(mail):
     mail = re.sub(pattern, "", mail)
     return mail
 
+def remove_links(mail):
+    links_pattern = [
+       r"<https:\/\/www\.instagram\.com\/petzl_official>",
+       r"<https:\/\/www\.facebook\.com\/Petzl>",
+       r"<https:\/\/www\.linkedin\.com\/company\/petzl\/about>"
+    ]
+    pattern = re.compile("|".join(links_pattern))
+    mail = re.sub(pattern, "", mail)
+    return mail
 
 def process_one_mail(body):
     """
@@ -95,6 +104,7 @@ def process(text):
         st.info("No need to process")
         return text
     text = remove_header(text)
+    text = remove_links(text)
     forward_pattern = [
         r"-+Original Message-+",
         r"-+ Forwarded message -+",
